@@ -1,6 +1,8 @@
 # Run VPR for the 'and' design
+pcf2place --pcf ${OPENFPGA_PCF} --blif ${VPR_TESTBENCH_BLIF} --pin_table ${OPENFPGA_PIN_TABLE} --fpga_io_map ${OPENFPGA_IO_MAP_FILE} --fpga_fix_pins ${OPENFPGA_VPR_FIX_PINS_FILE} --pin_table_direction_convention ${OPENFPGA_PIN_TABLE_DIRECTION_CONVENTION}
+
 #--write_rr_graph example_rr_graph.xml
-vpr ${VPR_ARCH_FILE} ${VPR_TESTBENCH_BLIF} --clock_modeling ideal ${OPENFPGA_VPR_DEVICE_LAYOUT}
+vpr ${VPR_ARCH_FILE} ${VPR_TESTBENCH_BLIF} --clock_modeling ideal --device ${OPENFPGA_VPR_DEVICE_LAYOUT} --sdc_file ${OPENFPGA_DESIGN_SDC_FILE} --fix_clusters ${OPENFPGA_VPR_FIX_PINS_FILE}
 
 # Read OpenFPGA architecture definition
 read_openfpga_arch -f ${OPENFPGA_ARCH_FILE}
@@ -47,7 +49,8 @@ write_fabric_bitstream --file fabric_bitstream.bit --format plain_text ${OPENFPG
 
 # Write the Verilog netlist for FPGA fabric
 #  - Enable the use of explicit port mapping in Verilog netlist
-write_fabric_verilog --file ./SRC --explicit_port_mapping --include_timing --print_user_defined_template --verbose
+write_fabric_verilog --file ./SRC --explicit_port_mapping --include_timing --print_user_defined_template --default_net_type ${OPENFPGA_VERILOG_DEFAULT_NET_TYPE} --verbose
+write_fabric_io_info --file io_info
 
 # Write the Verilog testbench for FPGA fabric
 #  - We suggest the use of same output directory as fabric Verilog netlists

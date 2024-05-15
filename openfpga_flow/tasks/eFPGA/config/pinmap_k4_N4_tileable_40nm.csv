@@ -1,0 +1,7 @@
+orientation,row,col,pin_num_in_cell,port_name,mapped_pin,GPIO_type,Associated Clock,Clock Edge
+TOP,,,,gfpga_pad_IO_A2F[0],pad_fpga_io[0],in,,
+TOP,,,,gfpga_pad_IO_F2A[0],pad_fpga_io[0],out,,
+TOP,,,,gfpga_pad_IO_A2F[1],pad_fpga_io[1],in,,
+TOP,,,,gfpga_pad_IO_F2A[1],pad_fpga_io[1],out,,
+TOP,,,,gfpga_pad_IO_A2F[2],pad_fpga_io[2],in,,
+TOP,,,,gfpga_pad_IO_F2A[2],pad_fpga_io[2],out,,

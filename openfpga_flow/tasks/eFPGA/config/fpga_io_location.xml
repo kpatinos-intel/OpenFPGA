@@ -1,0 +1,34 @@
+<io_coordinates>
+	<io pad="gfpga_pad_GPIO_PAD[24]" x="0" y="1" z="0"/>
+	<io pad="gfpga_pad_GPIO_PAD[25]" x="0" y="1" z="1"/>
+	<io pad="gfpga_pad_GPIO_PAD[26]" x="0" y="2" z="0"/>
+	<io pad="gfpga_pad_GPIO_PAD[27]" x="0" y="2" z="1"/>
+	<io pad="gfpga_pad_GPIO_PAD[28]" x="0" y="3" z="0"/>
+	<io pad="gfpga_pad_GPIO_PAD[29]" x="0" y="3" z="1"/>
+	<io pad="gfpga_pad_GPIO_PAD[30]" x="0" y="4" z="0"/>
+	<io pad="gfpga_pad_GPIO_PAD[31]" x="0" y="4" z="1"/>
+	<io pad="gfpga_pad_GPIO_PAD[22]" x="1" y="0" z="0"/>
+	<io pad="gfpga_pad_GPIO_PAD[23]" x="1" y="0" z="1"/>
+	<io pad="gfpga_pad_GPIO_PAD[0]" x="1" y="5" z="0"/>
+	<io pad="gfpga_pad_GPIO_PAD[1]" x="1" y="5" z="1"/>
+	<io pad="gfpga_pad_GPIO_PAD[20]" x="2" y="0" z="0"/>
+	<io pad="gfpga_pad_GPIO_PAD[21]" x="2" y="0" z="1"/>
+	<io pad="gfpga_pad_GPIO_PAD[2]" x="2" y="5" z="0"/>
+	<io pad="gfpga_pad_GPIO_PAD[3]" x="2" y="5" z="1"/>
+	<io pad="gfpga_pad_GPIO_PAD[18]" x="3" y="0" z="0"/>
+	<io pad="gfpga_pad_GPIO_PAD[19]" x="3" y="0" z="1"/>
+	<io pad="gfpga_pad_GPIO_PAD[4]" x="3" y="5" z="0"/>
+	<io pad="gfpga_pad_GPIO_PAD[5]" x="3" y="5" z="1"/>
+	<io pad="gfpga_pad_GPIO_PAD[16]" x="4" y="0" z="0"/>
+	<io pad="gfpga_pad_GPIO_PAD[17]" x="4" y="0" z="1"/>
+	<io pad="gfpga_pad_GPIO_PAD[6]" x="4" y="5" z="0"/>
+	<io pad="gfpga_pad_GPIO_PAD[7]" x="4" y="5" z="1"/>
+	<io pad="gfpga_pad_GPIO_PAD[14]" x="5" y="1" z="0"/>
+	<io pad="gfpga_pad_GPIO_PAD[15]" x="5" y="1" z="1"/>
+	<io pad="gfpga_pad_GPIO_PAD[12]" x="5" y="2" z="0"/>
+	<io pad="gfpga_pad_GPIO_PAD[13]" x="5" y="2" z="1"/>
+	<io pad="gfpga_pad_GPIO_PAD[10]" x="5" y="3" z="0"/>
+	<io pad="gfpga_pad_GPIO_PAD[11]" x="5" y="3" z="1"/>
+	<io pad="gfpga_pad_GPIO_PAD[8]" x="5" y="4" z="0"/>
+	<io pad="gfpga_pad_GPIO_PAD[9]" x="5" y="4" z="1"/>
+</io_coordinates>

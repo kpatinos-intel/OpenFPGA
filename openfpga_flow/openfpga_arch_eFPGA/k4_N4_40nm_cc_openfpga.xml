@@ -29,29 +29,17 @@
     </variation_library>
   </technology_library>
   <circuit_library>
-    <circuit_model type="inv_buf" name="INVTX1" prefix="INVTX1" is_default="true">
+    <circuit_model type="inv_buf" name="sky130_fd_sc_ls__inv_1" prefix="sky130_fd_sc_ls__inv_1" verilog_netlist="${OPENFPGA_PATH}/skywater-pdk/libraries/sky130_fd_sc_ls/latest/cells/inv/sky130_fd_sc_ls__inv_1.v" is_default="true">
       <design_technology type="cmos" topology="inverter" size="1"/>
       <device_technology device_model_name="logic"/>
-      <port type="input" prefix="in" size="1"/>
-      <port type="output" prefix="out" size="1"/>
-      <delay_matrix type="rise" in_port="in" out_port="out">
-        10e-12
-      </delay_matrix>
-      <delay_matrix type="fall" in_port="in" out_port="out">
-        10e-12
-      </delay_matrix>
+      <port type="input" prefix="A" size="1"/>
+      <port type="output" prefix="Y" size="1"/>
     </circuit_model>
-    <circuit_model type="inv_buf" name="buf4" prefix="buf4" is_default="false">
-      <design_technology type="cmos" topology="buffer" size="1" num_level="2" f_per_stage="4"/>
+    <circuit_model type="inv_buf" name="sky130_fd_sc_ls__buf_4" prefix="sky130_fd_sc_ls__buf_4" verilog_netlist="${OPENFPGA_PATH}/skywater-pdk/libraries/sky130_fd_sc_ls/latest/cells/buf/sky130_fd_sc_ls__buf_4.v" is_default="false">
+      <design_technology type="cmos" topology="buffer" size="4" num_level="2" f_per_stage="2"/>
       <device_technology device_model_name="logic"/>
-      <port type="input" prefix="in" size="1"/>
-      <port type="output" prefix="out" size="1"/>
-      <delay_matrix type="rise" in_port="in" out_port="out">
-        10e-12
-      </delay_matrix>
-      <delay_matrix type="fall" in_port="in" out_port="out">
-        10e-12
-      </delay_matrix>
+      <port type="input" prefix="A" size="1"/>
+      <port type="output" prefix="X" size="1"/>
     </circuit_model>
     <circuit_model type="inv_buf" name="tap_buf4" prefix="tap_buf4" is_default="false">
       <design_technology type="cmos" topology="buffer" size="1" num_level="3" f_per_stage="4"/>
@@ -101,8 +89,8 @@
     </circuit_model>
     <circuit_model type="mux" name="mux_tree" prefix="mux_tree" dump_structural_verilog="true">
       <design_technology type="cmos" structure="tree" add_const_input="true" const_input_val="1"/>
-      <input_buffer exist="true" circuit_model_name="INVTX1"/>
-      <output_buffer exist="true" circuit_model_name="INVTX1"/>
+      <input_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
+      <output_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
       <pass_gate_logic circuit_model_name="TGATE"/>
       <port type="input" prefix="in" size="1"/>
       <port type="output" prefix="out" size="1"/>
@@ -110,7 +98,7 @@
     </circuit_model>
     <circuit_model type="mux" name="mux_tree_tapbuf" prefix="mux_tree_tapbuf" is_default="true" dump_structural_verilog="true">
       <design_technology type="cmos" structure="tree" add_const_input="true" const_input_val="1"/>
-      <input_buffer exist="true" circuit_model_name="INVTX1"/>
+      <input_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
       <output_buffer exist="true" circuit_model_name="tap_buf4"/>
       <pass_gate_logic circuit_model_name="TGATE"/>
       <port type="input" prefix="in" size="1"/>
@@ -120,8 +108,8 @@
     <!--DFF subckt ports should be defined as <D> <Q> <CLK> <RESET> <SET>  -->
     <circuit_model type="ff" name="DFFSRQ" prefix="DFFSRQ" spice_netlist="${OPENFPGA_PATH}/openfpga_flow/openfpga_cell_library/spice/dff.sp" verilog_netlist="${OPENFPGA_PATH}/openfpga_flow/openfpga_cell_library/verilog/dff.v">
       <design_technology type="cmos"/>
-      <input_buffer exist="true" circuit_model_name="INVTX1"/>
-      <output_buffer exist="true" circuit_model_name="INVTX1"/>
+      <input_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
+      <output_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
       <port type="input" prefix="D" size="1"/>
       <port type="input" prefix="set" lib_name="SET" size="1" is_global="true" default_val="0" is_set="true"/>
       <port type="input" prefix="reset" lib_name="RST" size="1" is_global="true" default_val="0" is_reset="true"/>
@@ -130,10 +118,10 @@
     </circuit_model>
     <circuit_model type="lut" name="lut4" prefix="lut4" dump_structural_verilog="true">
       <design_technology type="cmos"/>
-      <input_buffer exist="true" circuit_model_name="INVTX1"/>
-      <output_buffer exist="true" circuit_model_name="INVTX1"/>
-      <lut_input_inverter exist="true" circuit_model_name="INVTX1"/>
-      <lut_input_buffer exist="true" circuit_model_name="buf4"/>
+      <input_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
+      <output_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
+      <lut_input_inverter exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
+      <lut_input_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__buf_4"/>
       <pass_gate_logic circuit_model_name="TGATE"/>
       <port type="input" prefix="in" size="4"/>
       <port type="output" prefix="out" size="1"/>
@@ -142,8 +130,8 @@
     <!--Scan-chain DFF subckt ports should be defined as <D> <Q> <Qb> <CLK> <RESET> <SET>  -->
     <circuit_model type="ccff" name="DFF" prefix="DFF" spice_netlist="${OPENFPGA_PATH}/openfpga_flow/openfpga_cell_library/spice/dff.sp" verilog_netlist="${OPENFPGA_PATH}/openfpga_flow/openfpga_cell_library/verilog/dff.v">
       <design_technology type="cmos"/>
-      <input_buffer exist="true" circuit_model_name="INVTX1"/>
-      <output_buffer exist="true" circuit_model_name="INVTX1"/>
+      <input_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
+      <output_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
       <port type="input" prefix="D" size="1"/>
       <port type="output" prefix="Q" size="1"/>
       <port type="output" prefix="QN" size="1"/>
@@ -151,8 +139,8 @@
     </circuit_model>
     <circuit_model type="iopad" name="GPIO" prefix="GPIO" spice_netlist="${OPENFPGA_PATH}/openfpga_flow/openfpga_cell_library/spice/gpio.sp" verilog_netlist="${OPENFPGA_PATH}/openfpga_flow/openfpga_cell_library/verilog/gpio.v">
       <design_technology type="cmos"/>
-      <input_buffer exist="true" circuit_model_name="INVTX1"/>
-      <output_buffer exist="true" circuit_model_name="INVTX1"/>
+      <input_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
+      <output_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
       <port type="inout" prefix="PAD" size="1" is_global="true" is_io="true" is_data_io="true"/>
       <port type="sram" prefix="DIR" size="1" mode_select="true" circuit_model_name="DFF" default_val="1"/>
       <port type="input" prefix="outpad" lib_name="A" size="1"/>

@@ -26,29 +26,35 @@
   -->
   <models>
     <!-- A virtual model for I/O to be used in the physical mode of io block -->
-    <model name="io">
-      <input_ports>
-        <port name="outpad"/>
-      </input_ports>
-      <output_ports>
-        <port name="inpad"/>
-      </output_ports>
-    </model>
   </models>
   <tiles>
-    <tile name="io" area="10">
-      <sub_tile name="io" capacity="1">
+    <tile name="gp_inpad" area="0">
+      <sub_tile name="gp_inpad" capacity="2">
         <equivalent_sites>
-          <site pb_type="io"/>
+          <site pb_type="gp_inpad"/>
         </equivalent_sites>
-        <input name="outpad" num_pins="1"/>
         <output name="inpad" num_pins="1"/>
         <fc in_type="frac" in_val="0.15" out_type="frac" out_val="0.10"/>
         <pinlocations pattern="custom">
-          <loc side="left">io.outpad io.inpad</loc>
-          <loc side="top">io.outpad io.inpad</loc>
-          <loc side="right">io.outpad io.inpad</loc>
-          <loc side="bottom">io.outpad io.inpad</loc>
+          <loc side="left">gp_inpad.inpad</loc>
+          <loc side="top">gp_inpad.inpad</loc>
+          <loc side="right">gp_inpad.inpad</loc>
+          <loc side="bottom">gp_inpad.inpad</loc>
+        </pinlocations>
+      </sub_tile>
+    </tile>
+    <tile name="gp_outpad" area="0">
+      <sub_tile name="gp_outpad" capacity="2">
+        <equivalent_sites>
+          <site pb_type="gp_outpad"/>
+        </equivalent_sites>
+        <input name="outpad" num_pins="1"/>
+        <fc in_type="frac" in_val="0.15" out_type="frac" out_val="0.10"/>
+        <pinlocations pattern="custom">
+          <loc side="left">gp_outpad.outpad</loc>
+          <loc side="top">gp_outpad.outpad</loc>
+          <loc side="right">gp_outpad.outpad</loc>
+          <loc side="bottom">gp_outpad.outpad</loc>
         </pinlocations>
       </sub_tile>
     </tile>
@@ -57,7 +63,7 @@
         <equivalent_sites>
           <site pb_type="clb"/>
         </equivalent_sites>
-        <input name="I" num_pins="12" equivalent="full"/>
+        <input name="I" num_pins="10" equivalent="full"/>
         <output name="O" num_pins="4" equivalent="none"/>
         <clock name="clk" num_pins="1"/>
         <fc in_type="frac" in_val="0.15" out_type="frac" out_val="0.10"/>
@@ -69,43 +75,30 @@
   <!-- Physical descriptions begin -->
   <layout tileable="true" concat_wire="false" concat_pass_wire="true">
     <auto_layout aspect_ratio="1.0">
-      <!--Perimeter of 'io' blocks with 'EMPTY' blocks at corners-->
-      <perimeter type="io" priority="100"/>
+      <region type="gp_inpad" priority="100" startx="1" endx="W-1" incrx="2" starty="H-1" endy="H-1"/>
+      <region type="gp_outpad" priority="100" startx="2" endx="W-1" incrx="2" starty="H-1" endy="H-1"/>
+      <region type="gp_outpad" priority="100" startx="W-1" endx="W-1" starty="1" endy="H-1" incry="2"/>
+      <region type="gp_inpad" priority="100" startx="W-1" endx="W-1" starty="2" endy="H-1" incry="2"/>
+      <region type="gp_inpad" priority="100" startx="1" endx="W-1" incrx="2" starty="0" endy="0"/>
+      <region type="gp_outpad" priority="100" startx="2" endx="W-1" incrx="2" starty="0" endy="0"/>
+      <corners type="EMPTY" priority="101"/>
+      <region type="gp_outpad" priority="100" startx="0" endx="0" starty="1" endy="H-1" incry="2"/>
+      <region type="gp_inpad" priority="100" startx="0" endx="0" starty="2" endy="H-1" incry="2"/>
+      <corners type="EMPTY" priority="101"/>
       <corners type="EMPTY" priority="101"/>
       <!--Fill with 'clb'-->
       <fill type="clb" priority="10"/>
     </auto_layout>
-    <fixed_layout name="2x2" width="4" height="4">
-      <!--Perimeter of 'io' blocks with 'EMPTY' blocks at corners-->
-      <perimeter type="io" priority="100"/>
-      <corners type="EMPTY" priority="101"/>
-      <!--Fill with 'clb'-->
-      <fill type="clb" priority="10"/>
-    </fixed_layout>
     <fixed_layout name="4x4" width="6" height="6">
-      <!--Perimeter of 'io' blocks with 'EMPTY' blocks at corners-->
-      <perimeter type="io" priority="100"/>
+      <region type="gp_inpad" priority="100" startx="1" endx="W-1" incrx="2" starty="H-1" endy="H-1"/>
+      <region type="gp_outpad" priority="100" startx="2" endx="W-1" incrx="2" starty="H-1" endy="H-1"/>
+      <region type="gp_outpad" priority="100" startx="W-1" endx="W-1" starty="1" endy="H-1" incry="2"/>
+      <region type="gp_inpad" priority="100" startx="W-1" endx="W-1" starty="2" endy="H-1" incry="2"/>
+      <region type="gp_inpad" priority="100" startx="1" endx="W-1" incrx="2" starty="0" endy="0"/>
+      <region type="gp_outpad" priority="100" startx="2" endx="W-1" incrx="2" starty="0" endy="0"/>
       <corners type="EMPTY" priority="101"/>
-      <!--Fill with 'clb'-->
-      <fill type="clb" priority="10"/>
-    </fixed_layout>
-    <fixed_layout name="48x48" width="50" height="50">
-      <!--Perimeter of 'io' blocks with 'EMPTY' blocks at corners-->
-      <perimeter type="io" priority="100"/>
-      <corners type="EMPTY" priority="101"/>
-      <!--Fill with 'clb'-->
-      <fill type="clb" priority="10"/>
-    </fixed_layout>
-    <fixed_layout name="72x72" width="74" height="74">
-      <!--Perimeter of 'io' blocks with 'EMPTY' blocks at corners-->
-      <perimeter type="io" priority="100"/>
-      <corners type="EMPTY" priority="101"/>
-      <!--Fill with 'clb'-->
-      <fill type="clb" priority="10"/>
-    </fixed_layout>
-    <fixed_layout name="96x96" width="98" height="98">
-      <!--Perimeter of 'io' blocks with 'EMPTY' blocks at corners-->
-      <perimeter type="io" priority="100"/>
+      <region type="gp_outpad" priority="100" startx="0" endx="0" starty="1" endy="H-1" incry="2"/>
+      <region type="gp_inpad" priority="100" startx="0" endx="0" starty="2" endy="H-1" incry="2"/>
       <corners type="EMPTY" priority="101"/>
       <!--Fill with 'clb'-->
       <fill type="clb" priority="10"/>
@@ -168,60 +161,30 @@
     </segment>
   </segmentlist>
   <complexblocklist>
-    <!-- Define I/O pads begin -->
-    <!-- Capacity is a unique property of I/Os, it is the maximum number of I/Os that can be placed at the same (X,Y) location on the FPGA -->
-    <!-- Not sure of the area of an I/O (varies widely), and it's not relevant to the design of the FPGA core, so we're setting it to 0. -->
-    <pb_type name="io">
-      <input name="outpad" num_pins="1"/>
+    <pb_type name="gp_inpad">
       <output name="inpad" num_pins="1"/>
-      <!-- A mode denotes the physical implementation of an I/O 
-           This mode will be not packable but is mainly used for fabric verilog generation   
-        -->
-      <mode name="physical" disable_packing="true">
-        <pb_type name="iopad" blif_model=".subckt io" num_pb="1">
-          <input name="outpad" num_pins="1"/>
-          <output name="inpad" num_pins="1"/>
-        </pb_type>
-        <interconnect>
-          <direct name="outpad" input="io.outpad" output="iopad.outpad">
-            <delay_constant max="1e-11" in_port="io.outpad" out_port="iopad.outpad"/>
-          </direct>
-          <direct name="inpad" input="iopad.inpad" output="io.inpad">
-            <delay_constant max="5e-11" in_port="iopad.inpad" out_port="io.inpad"/>
-          </direct>
-        </interconnect>
-      </mode>
-      <!-- IOs can operate as either inputs or outputs.
-	     Delays below come from Ian Kuon. They are small, so they should be interpreted as
-	     the delays to and from registers in the I/O (and generally I/Os are registered 
-	     today and that is when you timing analyze them.
-	     -->
-      <mode name="inpad">
-        <pb_type name="inpad" blif_model=".input" num_pb="1">
-          <output name="inpad" num_pins="1"/>
-        </pb_type>
-        <interconnect>
-          <direct name="inpad" input="inpad.inpad" output="io.inpad">
-            <delay_constant max="5e-11" in_port="inpad.inpad" out_port="io.inpad"/>
-          </direct>
-        </interconnect>
-      </mode>
-      <mode name="outpad">
-        <pb_type name="outpad" blif_model=".output" num_pb="1">
-          <input name="outpad" num_pins="1"/>
-        </pb_type>
-        <interconnect>
-          <direct name="outpad" input="io.outpad" output="outpad.outpad">
-            <delay_constant max="1e-11" in_port="io.outpad" out_port="outpad.outpad"/>
-          </direct>
-        </interconnect>
-      </mode>
-      <!-- Every input pin is driven by 15% of the tracks in a channel, every output pin is driven by 10% of the tracks in a channel -->
-      <!-- IOs go on the periphery of the FPGA, for consistency, 
-          make it physically equivalent on all sides so that only one definition of I/Os is needed.
-          If I do not make a physically equivalent definition, then I need to define 4 different I/Os, one for each side of the FPGA
-        -->
-      <!-- Place I/Os on the sides of the FPGA -->
+      <pb_type name="inpad" blif_model=".input" num_pb="1">
+        <output name="inpad" num_pins="1"/>
+      </pb_type>
+      <interconnect>
+        <direct name="inpad" input="inpad.inpad" output="gp_inpad.inpad">
+          <delay_constant max="4.243e-11" in_port="inpad.inpad" out_port="gp_inpad.inpad"/>
+        </direct>
+      </interconnect>
+      <power method="ignore"/>
+    </pb_type>
+    <!-- Define input pads end -->
+    <!-- Define output pads begin -->
+    <pb_type name="gp_outpad">
+      <input name="outpad" num_pins="1"/>
+      <pb_type name="outpad" blif_model=".output" num_pb="1">
+        <input name="outpad" num_pins="1"/>
+      </pb_type>
+      <interconnect>
+        <direct name="outpad" input="gp_outpad.outpad" output="outpad.outpad">
+          <delay_constant max="1.394e-11" in_port="gp_outpad.outpad" out_port="outpad.outpad"/>
+        </direct>
+      </interconnect>
       <power method="ignore"/>
     </pb_type>
     <!-- Define I/O pads ends -->
@@ -236,7 +199,7 @@
 	   routing area up significantly, we estimate into the ~70% range. 
 	   -->
     <pb_type name="clb">
-      <input name="I" num_pins="12" equivalent="full"/>
+      <input name="I" num_pins="10" equivalent="full"/>
       <output name="O" num_pins="4" equivalent="none"/>
       <clock name="clk" num_pins="1"/>
       <!-- Describe basic logic element.  

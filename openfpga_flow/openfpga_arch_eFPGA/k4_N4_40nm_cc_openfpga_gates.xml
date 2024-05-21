@@ -87,21 +87,27 @@
       <port type="input" prefix="A" size="1"/>
       <port type="output" prefix="Y" size="1"/>
     </circuit_model>
-    <circuit_model type="inv_buf" name="sky130_fd_sc_ls__buf_4" prefix="sky130_fd_sc_ls__buf_4" verilog_netlist="${OPENFPGA_PATH}/skywater-pdk/libraries/sky130_fd_sc_ls/latest/cells/buf/sky130_fd_sc_ls__buf_4.v" is_default="false">
-      <design_technology type="cmos" topology="buffer" size="4" num_level="2" f_per_stage="2"/>
+    <circuit_model type="inv_buf" name="sky130_fd_sc_ls__buf_2" prefix="sky130_fd_sc_ls__buf_2" verilog_netlist="${OPENFPGA_PATH}/skywater-pdk/libraries/sky130_fd_sc_ls/latest/cells/buf/sky130_fd_sc_ls__buf_2.v" is_default="false">
+      <design_technology type="cmos" topology="buffer" size="1" num_level="2" f_per_stage="2"/>
       <device_technology device_model_name="logic"/>
-      <port type="input" prefix="A" size="1"/>
-      <port type="output" prefix="X" size="1"/>
+      <port type="input" prefix="in" lib_name="A" size="1"/>
+      <port type="output" prefix="out" lib_name="X" size="1"/>
     </circuit_model>
-    <circuit_model type="gate" name="sky130_fd_sc_ls__mux2" prefix="sky130_fd_sc_ls__mux2" verilog_netlist="${OPENFPGA_PATH}/skywater-pdk/libraries/sky130_fd_sc_ls/latest/cells/mux2/sky130_fd_sc_ls__mux2.v" is_default="true">
+    <circuit_model type="inv_buf" name="sky130_fd_sc_ls__buf_4" prefix="sky130_fd_sc_ls__buf_4" verilog_netlist="${OPENFPGA_PATH}/skywater-pdk/libraries/sky130_fd_sc_ls/latest/cells/buf/sky130_fd_sc_ls__buf_4.v" is_default="false">
+      <design_technology type="cmos" topology="buffer" size="1" num_level="2" f_per_stage="4"/>
+      <device_technology device_model_name="logic"/>
+      <port type="input" prefix="in" lib_name="A" size="1"/>
+      <port type="output" prefix="out" lib_name="X" size="1"/>
+    </circuit_model>
+    <circuit_model type="gate" name="sky130_fd_sc_ls__mux2_1" prefix="sky130_fd_sc_ls__mux2_1" verilog_netlist="${OPENFPGA_PATH}/skywater-pdk/libraries/sky130_fd_sc_ls/latest/cells/mux2/sky130_fd_sc_ls__mux2_1.v" is_default="true">
       <design_technology type="cmos" topology="MUX2"/>
       <device_technology device_model_name="logic"/>
       <input_buffer exist="false"/>
       <output_buffer exist="false"/>
-      <port type="input" prefix="A1" size="1"/>
-      <port type="input" prefix="A0" size="1"/>
-      <port type="input" prefix="S" size="1"/>
-      <port type="output" prefix="X" size="1"/>
+      <port type="input" prefix="in0" lib_name="A1" size="1"/>
+      <port type="input" prefix="in1" lib_name="A0" size="1"/>
+      <port type="input" prefix="sel" lib_name="S" size="1"/>
+      <port type="output" prefix="out" lib_name="X" size="1"/>
     </circuit_model>
     <circuit_model type="chan_wire" name="chan_segment" prefix="track_seg" is_default="true">
       <design_technology type="cmos"/>
@@ -123,18 +129,18 @@
     </circuit_model>
     <circuit_model type="mux" name="mux_tree" prefix="mux_tree" dump_structural_verilog="true">
       <design_technology type="cmos" structure="tree" add_const_input="true" const_input_val="1"/>
-      <input_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
-      <output_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
-      <pass_gate_logic circuit_model_name="sky130_fd_sc_ls__mux2"/>
+      <input_buffer exist="false"/>
+      <output_buffer exist="false"/>
+      <pass_gate_logic circuit_model_name="sky130_fd_sc_ls__mux2_1"/>
       <port type="input" prefix="in" size="1"/>
       <port type="output" prefix="out" size="1"/>
       <port type="sram" prefix="sram" size="1"/>
     </circuit_model>
     <circuit_model type="mux" name="mux_tree_tapbuf" prefix="mux_tree_tapbuf" is_default="true" dump_structural_verilog="true">
       <design_technology type="cmos" structure="tree" add_const_input="true" const_input_val="1"/>
-      <input_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
-      <output_buffer exist="true" circuit_model_name="tap_buf4"/>
-      <pass_gate_logic circuit_model_name="sky130_fd_sc_ls__mux2"/>
+      <input_buffer exist="false"/>
+      <output_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__buf_4"/>
+      <pass_gate_logic circuit_model_name="sky130_fd_sc_ls__mux2_1"/>
       <port type="input" prefix="in" size="1"/>
       <port type="output" prefix="out" size="1"/>
       <port type="sram" prefix="sram" size="1"/>
@@ -165,7 +171,7 @@
       <output_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
       <lut_input_inverter exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
       <lut_input_buffer exist="true" circuit_model_name="buf4"/>
-      <pass_gate_logic circuit_model_name="sky130_fd_sc_ls__mux2"/>
+      <pass_gate_logic circuit_model_name="sky130_fd_sc_ls__mux2_1"/>
       <port type="input" prefix="in" size="4"/>
       <port type="output" prefix="out" size="1"/>
       <port type="sram" prefix="sram" size="16"/>

@@ -37,7 +37,7 @@
   </models>
   <tiles>
     <tile name="io" area="10">
-      <sub_tile name="io" capacity="1">
+      <sub_tile name="io" capacity="4">
         <equivalent_sites>
           <site pb_type="io"/>
         </equivalent_sites>
@@ -89,7 +89,7 @@
       <!--Fill with 'clb'-->
       <fill type="clb" priority="10"/>
     </fixed_layout>
-    <fixed_layout name="48x48" width="50" height="50">
+    <fixed_layout name="8x8" width="10" height="10">
       <!--Perimeter of 'io' blocks with 'EMPTY' blocks at corners-->
       <perimeter type="io" priority="100"/>
       <corners type="EMPTY" priority="101"/>
@@ -259,6 +259,12 @@
               <output name="out" num_pins="1" port_class="lut_out"/>
               <!-- LUT timing using delay matrix -->
               <delay_matrix type="max" in_port="lut4.in" out_port="lut4.out">
+                10e-12
+                10e-12
+                10e-12
+                10e-12
+              </delay_matrix>
+              <delay_matrix type="min" in_port="lut4.in" out_port="lut4.out">
                 1e-12
                 1e-12
                 1e-12
@@ -272,7 +278,8 @@
               <clock name="clk" num_pins="1" port_class="clock"/>
               <T_setup value="1e-12" port="ff.D" clock="clk"/>
               <T_hold value="1e-12" port="ff.D" clock="clk"/>
-              <T_clock_to_Q max="1e-12" port="ff.Q" clock="clk"/>
+              <T_clock_to_Q max="10e-12" port="ff.Q" clock="clk"/>
+              <T_clock_to_Q min="1e-12" port="ff.Q" clock="clk"/>
             </pb_type>
             <interconnect>
               <direct name="direct1" input="ble4.in" output="lut4[0:0].in"/>
@@ -285,6 +292,8 @@
                 <!-- LUT to output is faster than FF to output on a Stratix IV -->
                 <delay_constant max="1e-12" in_port="lut4.out" out_port="ble4.out"/>
                 <delay_constant max="1e-12" in_port="ff.Q" out_port="ble4.out"/>
+                <delay_constant min="0.5e-12" in_port="lut4.out" out_port="ble4.out"/>
+                <delay_constant min="0.5e-12" in_port="ff.Q" out_port="ble4.out"/>
               </mux>
             </interconnect>
           </pb_type>

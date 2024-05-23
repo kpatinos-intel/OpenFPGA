@@ -37,7 +37,7 @@
   </models>
   <tiles>
     <tile name="io" area="10">
-      <sub_tile name="io" capacity="4">
+      <sub_tile name="io" capacity="1">
         <equivalent_sites>
           <site pb_type="io"/>
         </equivalent_sites>

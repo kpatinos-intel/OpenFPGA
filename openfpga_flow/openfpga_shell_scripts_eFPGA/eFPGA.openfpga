@@ -6,6 +6,7 @@ vpr ${VPR_ARCH_FILE} ${VPR_TESTBENCH_BLIF} --clock_modeling route \
                                            --device ${OPENFPGA_VPR_DEVICE_LAYOUT} \
                                            --sdc_file ${OPENFPGA_DESIGN_SDC_FILE} \
                                            --fix_clusters ${TOP_MODULE}_fixed.place \
+                                           --gen_post_synthesis_netlist on \
                                            --timing_report_detail detailed
 
 # Read OpenFPGA architecture definition

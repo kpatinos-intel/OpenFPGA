@@ -596,3 +596,45 @@ assign WLW = WEN ? q_reg : 1'b0;
 assign WLR = 1'b0; // Use a constant output just for simple testing
 
 endmodule //End Of Module
+
+//-----------------------------------------------------
+// Function    : D-type flip-flop with 
+//               - asynchronous active high reset
+// @note This DFF is designed to drive WLs and WLRs when shift registers are used
+//-----------------------------------------------------
+module DFFCFGEN (
+  input RST, // Reset input
+  input CK, // Clock Input
+  input CFG_EN, // Reset input
+  input D, // Data Input
+  output Q, // Q output
+  output QN, // Drive WL write signals
+  output SCAN_Q // Drive WL read signals
+);
+//------------Internal Variables--------
+reg q_reg;
+reg scan_q_reg;
+
+//-------------Code Starts Here---------
+always @ ( posedge CK or posedge RST)
+if (RST) begin
+  q_reg <= 1'b0;
+end else begin
+  if(~CFG_EN) q_reg <= scan_q_reg;
+  else q_reg <= q_reg;
+end
+
+//-------------Code Starts Here---------
+always @ ( posedge CK or posedge RST)
+if (RST) begin
+  scan_q_reg <= 1'b0;
+end else begin
+  if(CFG_EN) scan_q_reg <= D;
+  else scan_q_reg <= scan_q_reg;
+end
+
+assign Q = q_reg;
+assign QN = ~q_reg;
+assign SCAN_Q = scan_q_reg;
+
+endmodule //End Of Module

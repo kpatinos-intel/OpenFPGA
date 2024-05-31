@@ -135,6 +135,18 @@
       <port type="output" prefix="QN" size="1"/>
       <port type="clock" prefix="prog_clk" lib_name="CK" size="1" is_global="true" default_val="0" is_prog="true"/>
     </circuit_model>
+    <circuit_model type="ccff" name="DFFCFGEN" prefix="DFFCFGEN" spice_netlist="${OPENFPGA_PATH}/openfpga_flow/openfpga_cell_library/spice/dff.sp" verilog_netlist="${OPENFPGA_PATH}/openfpga_flow/openfpga_cell_library/verilog/dff.v">
+      <design_technology type="cmos"/>
+      <input_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
+      <output_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
+      <port type="input" prefix="pReset" lib_name="RST" size="1" is_global="true" default_val="0" is_reset="true"/>
+      <port type="input" prefix="pEnable" lib_name="CFG_EN" size="1" is_global="true" default_val="0" is_config_enable="true"/>
+      <port type="input" prefix="D" size="1"/>
+      <port type="output" prefix="SCAN_Q" size="1"/>
+      <port type="output" prefix="QN" size="1"/>
+      <port type="output" prefix="Q" size="1"/>
+      <port type="clock" prefix="prog_clk" lib_name="CK" size="1" is_global="true" default_val="0" is_prog="true"/>
+    </circuit_model>
     <circuit_model type="hard_logic" name="ADDF" prefix="ADDF" is_default="true" spice_netlist="${OPENFPGA_PATH}/openfpga_flow/openfpga_cell_library/spice/adder.sp" verilog_netlist="${OPENFPGA_PATH}/openfpga_flow/openfpga_cell_library/verilog/adder.v">
       <design_technology type="cmos"/>
       <input_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
@@ -150,13 +162,13 @@
       <input_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
       <output_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
       <port type="inout" prefix="PAD" size="1" is_global="true" is_io="true" is_data_io="true"/>
-      <port type="sram" prefix="DIR" size="1" mode_select="true" circuit_model_name="DFFR" default_val="1"/>
+      <port type="sram" prefix="DIR" size="1" mode_select="true" circuit_model_name="DFFCFGEN" default_val="1"/>
       <port type="input" prefix="outpad" lib_name="A" size="1"/>
       <port type="output" prefix="inpad" lib_name="Y" size="1"/>
     </circuit_model>
   </circuit_library>
   <configuration_protocol>
-    <organization type="scan_chain" circuit_model_name="DFFR"  num_regions="48"/>
+    <organization type="scan_chain" circuit_model_name="DFFCFGEN"  num_regions="48"/>
   </configuration_protocol>
   <connection_block>
     <switch name="ipin_cblock" circuit_model_name="mux_tree_tapbuf"/>

@@ -70,6 +70,12 @@ end
 
 assign Q = q_reg;
 
+   always @(*) begin
+        if($time > 0) begin
+            a_unknown_RST: assert (!$isunknown(RST)) else $error("unknown value on RST");
+            a_unknown_Q: assert (!$isunknown(Q)) else $error("unknown value on Q");
+        end
+   end
 endmodule //End Of Module
 
 
@@ -616,7 +622,7 @@ reg q_reg;
 reg scan_q_reg;
 
 //-------------Code Starts Here---------
-always @ ( posedge CK or posedge RST)
+always @ (posedge CK)
 if (RST) begin
   q_reg <= 1'b0;
 end else begin
@@ -625,7 +631,7 @@ end else begin
 end
 
 //-------------Code Starts Here---------
-always @ ( posedge CK or posedge RST)
+always @ (posedge CK)
 if (RST) begin
   scan_q_reg <= 1'b0;
 end else begin
@@ -636,5 +642,12 @@ end
 assign Q = q_reg;
 assign QN = ~q_reg;
 assign SCAN_Q = scan_q_reg;
+
+   always @(*) begin
+        if($time > 0) begin
+            a_unknown_RST: assert (!$isunknown(RST)) else $error("unknown value on RST");
+            a_unknown_Q: assert (!$isunknown(Q)) else $error("unknown value on Q");
+        end
+   end
 
 endmodule //End Of Module

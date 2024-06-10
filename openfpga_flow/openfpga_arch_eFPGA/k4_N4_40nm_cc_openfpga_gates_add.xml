@@ -149,8 +149,8 @@
     </circuit_model>
     <circuit_model type="hard_logic" name="ADDF" prefix="ADDF" is_default="true" spice_netlist="${OPENFPGA_PATH}/openfpga_flow/openfpga_cell_library/spice/adder.sp" verilog_netlist="${OPENFPGA_PATH}/openfpga_flow/openfpga_cell_library/verilog/adder.v">
       <design_technology type="cmos"/>
-      <input_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
-      <output_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__inv_1"/>
+      <input_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__buf_2"/>
+      <output_buffer exist="true" circuit_model_name="sky130_fd_sc_ls__buf_2"/>
       <port type="input" prefix="a" lib_name="A" size="1"/>
       <port type="input" prefix="b" lib_name="B" size="1"/>
       <port type="input" prefix="cin" lib_name="CI" size="1"/>

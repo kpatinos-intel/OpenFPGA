@@ -73,8 +73,13 @@
         <output name="O" num_pins="8" equivalent="none"/>
         <output name="cout" num_pins="1"/>
         <clock name="clk" num_pins="1"/>
-        <fc in_type="frac" in_val="0.15" out_type="frac" out_val="0.10"/>
-        <pinlocations pattern="spread"/>
+        <fc in_type="frac" in_val="0.15" out_type="frac" out_val="0.30"/>
+        <pinlocations pattern="custom">
+          <loc side="top">clb.clk clb.cin clb.I[2:0] clb.O[1:0]</loc>
+          <loc side="left">clb.clk clb.I[5:3] clb.O[3:2]</loc>
+          <loc side="bottom">clb.clk clb.cout clb.I[8:6] clb.O[5:4]</loc>
+          <loc side="right">clb.clk clb.I[9] clb.O[7:6] </loc>
+        </pinlocations>
       </sub_tile>
     </tile>
   </tiles>

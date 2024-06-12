@@ -1,11 +1,13 @@
 # Run VPR for the 'and' design
-pcf2place --pcf ${OPENFPGA_PCF} --blif ${VPR_TESTBENCH_BLIF} --pin_table ${OPENFPGA_PIN_TABLE} --fpga_io_map ${OPENFPGA_IO_MAP_FILE} --fpga_fix_pins ${OPENFPGA_VPR_FIX_PINS_FILE} --pin_table_direction_convention ${OPENFPGA_PIN_TABLE_DIRECTION_CONVENTION} --verbose
+pcf2place --pcf ${OPENFPGA_PCF_PATH}${TOP_MODULE}.pcf --blif ${VPR_TESTBENCH_BLIF} --pin_table ${OPENFPGA_PIN_TABLE} --fpga_io_map ${OPENFPGA_IO_MAP_FILE} --fpga_fix_pins ${TOP_MODULE}_fixed.place --pin_table_direction_convention ${OPENFPGA_PIN_TABLE_DIRECTION_CONVENTION} --verbose
 
 #--write_rr_graph example_rr_graph.xml
 vpr ${VPR_ARCH_FILE} ${VPR_TESTBENCH_BLIF} --clock_modeling route \
                                            --device ${OPENFPGA_VPR_DEVICE_LAYOUT} \
                                            --sdc_file ${OPENFPGA_DESIGN_SDC_FILE} \
-                                           --fix_clusters ${OPENFPGA_VPR_FIX_PINS_FILE} \
+                                           --fix_clusters ${TOP_MODULE}_fixed.place \
+                                           --gen_post_synthesis_netlist on \
+                                           --route_chan_width 100 \
                                            --timing_report_detail detailed
 
 # Read OpenFPGA architecture definition
@@ -16,7 +18,7 @@ read_openfpga_simulation_setting -f ${OPENFPGA_SIM_SETTING_FILE}
 
 # Annotate the OpenFPGA architecture to VPR data base
 # to debug use --verbose options
-link_openfpga_arch --activity_file ${ACTIVITY_FILE} --sort_gsb_chan_node_in_edges
+link_openfpga_arch --sort_gsb_chan_node_in_edges --verbose
 
 # Check and correct any naming conflicts in the BLIF netlist
 check_netlist_naming_conflict --fix --report ./netlist_renaming.xml

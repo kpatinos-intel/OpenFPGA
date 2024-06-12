@@ -1,2 +1,0 @@
-set_io clk_i pad_fpga_io[0]
-set_io reset_i pad_fpga_io[1]

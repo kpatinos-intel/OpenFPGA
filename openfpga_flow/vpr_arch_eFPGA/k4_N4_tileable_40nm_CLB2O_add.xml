@@ -1,29 +1,6 @@
 <?xml version="1.0"?>
-<!-- 
-  Architecture with no fracturable LUTs
 
-  - 40 nm technology
-  - General purpose logic block: 
-    K = 4, N = 4
-  - Routing architecture: L = 4, fc_in = 0.15, Fc_out = 0.1
-
-  Details on Modelling:
-
-  Based on flagship k6_frac_N10_mem32K_40nm.xml architecture.  This architecture has no fracturable LUTs nor any heterogeneous blocks.
-
-
-  Authors: Jason Luu, Jeff Goeders, Vaughn Betz
--->
 <architecture>
-  <!-- 
-       ODIN II specific config begins 
-       Describes the types of user-specified netlist blocks (in blif, this corresponds to 
-       ".model [type_of_block]") that this architecture supports.
-
-       Note: Basic LUTs, I/Os, and flip-flops are not included here as there are 
-       already special structures in blif (.names, .input, .output, and .latch) 
-       that describe them.
-  -->
   <models>
     <!-- A virtual model for I/O to be used in the physical mode of io block -->
     <model name="io">
@@ -73,12 +50,14 @@
         <output name="O" num_pins="8" equivalent="none"/>
         <output name="cout" num_pins="1"/>
         <clock name="clk" num_pins="1"/>
-        <fc in_type="frac" in_val="0.15" out_type="frac" out_val="0.30"/>
+        <fc in_type="frac" in_val="0.15" out_type="frac" out_val="0.15"/>
+          <fc_override port_name="cin" fc_type="frac" fc_val="0"/>
+          <fc_override port_name="cout" fc_type="frac" fc_val="0"/>
         <pinlocations pattern="custom">
-          <loc side="top">clb.clk clb.cin clb.I[2:0] clb.O[1:0]</loc>
+          <loc side="top">clb.cin clb.I[2:0] clb.O[1:0]</loc>
           <loc side="left">clb.clk clb.I[5:3] clb.O[3:2]</loc>
-          <loc side="bottom">clb.clk clb.cout clb.I[8:6] clb.O[5:4]</loc>
-          <loc side="right">clb.clk clb.I[9] clb.O[7:6] </loc>
+          <loc side="bottom">clb.cout clb.I[8:6] clb.O[5:4]</loc>
+          <loc side="right">clb.I[9] clb.O[7:6] </loc>
         </pinlocations>
       </sub_tile>
     </tile>
@@ -184,10 +163,10 @@
       <sb type="pattern">1 1 1 1 1</sb>
       <cb type="pattern">1 1 1 1</cb>
     </segment>
-  </segmentlist>  
+  </segmentlist>
   <directlist>
     <direct name="adder_carry" from_pin="clb.cout" to_pin="clb.cin" x_offset="0" y_offset="-1" z_offset="0"/>
-  </directlist>
+  </directlist>  
   <complexblocklist>
     <!-- Define I/O pads begin -->
     <!-- Capacity is a unique property of I/Os, it is the maximum number of I/Os that can be placed at the same (X,Y) location on the FPGA -->
@@ -356,7 +335,8 @@
         </complete>
         <complete name="clks" input="clb.clk" output="fle[3:0].clk">
         </complete>
-        <direct name="clbouts1" input="fle[3:0].out" output="clb.O"/>
+        <mux name="clbouts1" input="fle[3:0].out[0:0]" output="clb.O[3:0]"/>
+        <mux name="clbouts2" input="fle[3:0].out[1:1]" output="clb.O[7:4]"/>
         
         <direct name="carry_in" input="clb.cin" output="fle[0:0].cin">
           <!-- Put all inter-block carry chain delay on this one edge -->

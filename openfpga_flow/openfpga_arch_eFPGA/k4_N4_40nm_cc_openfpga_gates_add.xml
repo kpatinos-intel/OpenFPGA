@@ -167,34 +167,38 @@
       <port type="output" prefix="inpad" lib_name="Y" size="1"/>
     </circuit_model>
   </circuit_library>
+  
   <configuration_protocol>
     <organization type="scan_chain" circuit_model_name="DFFCFGEN"  num_regions="48"/>
   </configuration_protocol>
+  
   <connection_block>
     <switch name="ipin_cblock" circuit_model_name="mux_tree_tapbuf"/>
   </connection_block>
+  
   <switch_block>
     <switch name="0" circuit_model_name="mux_tree_tapbuf"/>
   </switch_block>
+  
   <routing_segment>
     <segment name="L4" circuit_model_name="chan_segment"/>
   </routing_segment>
+ 
+  <direct_connection>
+    <direct name="adder_carry" circuit_model_name="direct_interc" interconnection_type="column" x_dir="positive" y_dir="positive"/>
+  </direct_connection>
+  
   <pb_type_annotations>
-    <!-- physical pb_type binding in complex block IO -->
     <pb_type name="io" physical_mode_name="physical" idle_mode_name="inpad"/>
     <pb_type name="io[physical].iopad" circuit_model_name="GPIO" mode_bits="1"/>
     <pb_type name="io[inpad].inpad" physical_pb_type_name="io[physical].iopad" mode_bits="1"/>
     <pb_type name="io[outpad].outpad" physical_pb_type_name="io[physical].iopad" mode_bits="0"/>
-    <!-- End physical pb_type binding in complex block IO -->
-    <!-- physical pb_type binding in complex block CLB -->
-    <!-- physical mode will be the default mode if not specified -->
+    
     <pb_type name="clb">
-      <!-- Binding interconnect to circuit models as their physical implementation, if not defined, we use the default model -->
       <interconnect name="inoutfb" circuit_model_name="mux_tree"/>
     </pb_type>
     <pb_type name="clb.fle[n1_lut4].ble4.lut4" circuit_model_name="lut4"/>
     <pb_type name="clb.fle[n1_lut4].ble4.adder" circuit_model_name="ADDF"/>
     <pb_type name="clb.fle[n1_lut4].ble4.ff" circuit_model_name="DFFRQ"/>
-    <!-- End physical pb_type binding in complex block IO -->
   </pb_type_annotations>
 </openfpga_architecture>

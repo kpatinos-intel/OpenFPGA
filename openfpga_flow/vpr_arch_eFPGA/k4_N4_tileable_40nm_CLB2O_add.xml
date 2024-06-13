@@ -25,7 +25,7 @@
   </models>
   <tiles>
     <tile name="io" area="0">
-      <sub_tile name="io" capacity="1">
+      <sub_tile name="io" capacity="8">
         <equivalent_sites>
           <site pb_type="io"/>
         </equivalent_sites>
@@ -45,7 +45,7 @@
         <equivalent_sites>
           <site pb_type="clb"/>
         </equivalent_sites>
-        <input name="I" num_pins="10" equivalent="full"/>
+        <input name="I" num_pins="32" equivalent="full"/>
         <input name="cin" num_pins="1"/>
         <output name="O" num_pins="8" equivalent="none"/>
         <output name="cout" num_pins="1"/>
@@ -54,10 +54,10 @@
           <fc_override port_name="cin" fc_type="frac" fc_val="0"/>
           <fc_override port_name="cout" fc_type="frac" fc_val="0"/>
         <pinlocations pattern="custom">
-          <loc side="top">clb.cin clb.I[2:0] clb.O[1:0]</loc>
-          <loc side="left">clb.clk clb.I[5:3] clb.O[3:2]</loc>
-          <loc side="bottom">clb.cout clb.I[8:6] clb.O[5:4]</loc>
-          <loc side="right">clb.I[9] clb.O[7:6] </loc>
+          <loc side="top">clb.cin clb.I[7:0] clb.O[1:0]</loc>
+          <loc side="left">clb.clk clb.I[15:8] clb.O[3:2]</loc>
+          <loc side="bottom">clb.cout clb.I[23:16] clb.O[5:4]</loc>
+          <loc side="right">clb.I[31:24] clb.O[7:6] </loc>
         </pinlocations>
       </sub_tile>
     </tile>
@@ -236,7 +236,7 @@
 	   routing area up significantly, we estimate into the ~70% range. 
 	   -->
     <pb_type name="clb">
-      <input name="I" num_pins="10" equivalent="full"/>
+      <input name="I" num_pins="32" equivalent="full"/>
       <input name="cin" num_pins="1"/>
       <output name="O" num_pins="8" equivalent="none"/>
       <output name="cout" num_pins="1"/>
@@ -306,26 +306,32 @@
 
               <direct name="addcin" input="ble4.cin" output="adder.cin"/>
               <direct name="addcout" input="adder.cout" output="ble4.cout"/>
-              <complete name="adda" input="lut4[1:0].out" output="adder.a">
-              </complete>
-              <complete name="addb" input="lut4[1:0].out" output="adder.b">
-              </complete>
+              <mux name="adda" input="lut4[0:0].out lut4[1:1].out" output="adder.a">
+              </mux>
+              <mux name="addb" input="lut4[0:0].out lut4[1:1].out" output="adder.b">
+              </mux>
               
-              <complete name="flopD" input="lut4[1:0].out adder.sumout" output="ff.D">
-              </complete>
+              <mux name="flopD" input="lut4[0:0].out lut4[1:1].out adder.sumout" output="ff.D">
+                <delay_constant max="20e-12" in_port="lut4[0:0].out" out_port="ff.D"/>
+                <delay_constant max="20e-12" in_port="lut4[1:1].out" out_port="ff.D"/>
+                <delay_constant max="20e-12" in_port="adder.sumout" out_port="ff.D"/>
+                <pack_pattern name="ble" in_port="lut4[0:0].out" out_port="ff.D"/>
+                <pack_pattern name="ble" in_port="lut4[1:1].out" out_port="ff.D"/>
+                <pack_pattern name="ble" in_port="adder.sumout" out_port="ff.D"/>
+              </mux>
               
               <direct name="ffQ" input="ff.Q" output="ble4.out[0]"/>
-              <direct name="direct3" input="ble4.clk" output="ff.clk"/>
-              <complete name="ble4out" input="lut4[1:0].out adder.sumout" output="ble4.out[1]">
-              </complete>
+              <direct name="clkble" input="ble4.clk" output="ff.clk"/>
+              <mux name="bleout" input="lut4[0:0].out lut4[1:1].out adder.sumout" output="ble4.out[1]">
+              </mux>
             </interconnect>
           </pb_type>
           <interconnect>
-            <direct name="direct1" input="fle.in" output="ble4.in"/>
-            <direct name="direct2" input="fle.cin" output="ble4.cin"/>
-            <direct name="direct3" input="ble4.out" output="fle.out"/>
-            <direct name="direct4" input="ble4.cout" output="fle.cout"/>
-            <direct name="direct5" input="fle.clk" output="ble4.clk"/>
+            <direct name="flein" input="fle.in" output="ble4.in"/>
+            <direct name="flecin" input="fle.cin" output="ble4.cin"/>
+            <direct name="fleout" input="ble4.out" output="fle.out"/>
+            <direct name="flecout" input="ble4.cout" output="fle.cout"/>
+            <direct name="fleclk" input="fle.clk" output="ble4.clk"/>
           </interconnect>
         </mode>
         <!-- 6-LUT mode definition end -->
@@ -335,11 +341,10 @@
         </complete>
         <complete name="clks" input="clb.clk" output="fle[3:0].clk">
         </complete>
-        <mux name="clbouts1" input="fle[3:0].out[0:0]" output="clb.O[3:0]"/>
-        <mux name="clbouts2" input="fle[3:0].out[1:1]" output="clb.O[7:4]"/>
+        <direct name="clbouts1" input="fle[3:0].out[0]" output="clb.O[3:0]"/>
+        <direct name="clbouts2" input="fle[3:0].out[1]" output="clb.O[7:4]"/>
         
         <direct name="carry_in" input="clb.cin" output="fle[0:0].cin">
-          <!-- Put all inter-block carry chain delay on this one edge -->
           <delay_constant max="0.16e-9" in_port="clb.cin" out_port="fle[0:0].cin"/>
           <pack_pattern name="chain" in_port="clb.cin" out_port="fle[0:0].cin"/>
         </direct>

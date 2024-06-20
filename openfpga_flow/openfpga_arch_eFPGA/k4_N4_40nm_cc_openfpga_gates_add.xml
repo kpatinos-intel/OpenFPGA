@@ -169,7 +169,7 @@
   </circuit_library>
   
   <configuration_protocol>
-    <organization type="scan_chain" circuit_model_name="DFFCFGEN"  num_regions="48"/>
+    <organization type="scan_chain" circuit_model_name="DFFCFGEN"  num_regions="4"/>
   </configuration_protocol>
   
   <connection_block>

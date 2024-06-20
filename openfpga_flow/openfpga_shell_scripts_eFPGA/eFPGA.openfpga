@@ -6,8 +6,8 @@ vpr ${VPR_ARCH_FILE} ${VPR_TESTBENCH_BLIF} --clock_modeling route \
                                            --device ${OPENFPGA_VPR_DEVICE_LAYOUT} \
                                            --sdc_file ${OPENFPGA_DESIGN_SDC_FILE} \
                                            --gen_post_synthesis_netlist on \
-                                           --route_chan_width 50 \
-                                           --timing_report_detail detailed 
+                                           --timing_report_detail detailed \
+                                           --route_chan_width ${OPENFPGA_VPR_ROUTE_CHAN_WIDTH} 
                                           # --fix_clusters ${TOP_MODULE}_fixed.place \
 
 # Read OpenFPGA architecture definition

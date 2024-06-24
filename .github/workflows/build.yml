@@ -1,11 +1,18 @@
 name: Test 
 
 # Run CI on push, PR, and weekly.
-
 on:
+  workflow_dispatch:
   pull_request:
+  push:
+    branches:
+      - 'master'
   schedule:
     - cron: "0 0 * * 0 " # weekly
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 # Environment variables
 env:
@@ -35,7 +42,7 @@ jobs:
           access_token: ${{ github.token }}
           
       - name: Checkout OpenFPGA repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -118,7 +125,7 @@ jobs:
           access_token: ${{ github.token }}
           
       - name: Checkout OpenFPGA repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install dependencies
         run: sudo bash ./.github/workflows/install_dependencies_build_${{ matrix.config.dependency_version }}.sh
@@ -214,7 +221,7 @@ jobs:
           access_token: ${{ github.token }}
           
       - name: Checkout OpenFPGA repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install dependencies
         run: sudo bash ./.github/workflows/install_dependencies_build_${{ matrix.config.dependency_version }}.sh
@@ -260,7 +267,7 @@ jobs:
           access_token: ${{ github.token }}
           
       - name: Checkout OpenFPGA repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install dependencies
         run: sudo bash ./.github/workflows/install_dependencies_build_${{ matrix.config.dependency_version }}.sh
@@ -306,7 +313,7 @@ jobs:
           access_token: ${{ github.token }}
           
       - name: Checkout OpenFPGA repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install dependencies
         run: |
@@ -358,7 +365,7 @@ jobs:
           access_token: ${{ github.token }}
           
       - name: Checkout OpenFPGA repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install dependencies
         run: |
@@ -395,7 +402,7 @@ jobs:
           access_token: ${{ github.token }}
           
       - name: Checkout OpenFPGA repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Download a built artifacts
         uses: actions/download-artifact@v2
         with:
@@ -448,7 +455,7 @@ jobs:
           access_token: ${{ github.token }}
     
       - name: Checkout OpenFPGA repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Download a built artifacts
         uses: actions/download-artifact@v2
         with:
@@ -506,7 +513,7 @@ jobs:
           access_token: ${{ github.token }}
           
       - name: Checkout OpenFPGA repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: ${{matrix.config.name}}_GCC-11_(Ubuntu 22.04)
         shell: bash

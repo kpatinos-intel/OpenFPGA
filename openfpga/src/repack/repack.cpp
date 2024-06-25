@@ -17,6 +17,8 @@
 #include "repack.h"
 #include "vpr_utils.h"
 
+#include <unordered_set>
+
 /* begin namespace openfpga */
 namespace openfpga {
 
@@ -308,33 +310,6 @@ static std::vector<int> find_pb_route_by_atom_net(
  * This function will find the actual routing traces of the demanded net
  * There is a specific search space applied when searching the routing traces:
  * - ONLY applicable to the pb_pin of top-level pb_graph_node
- ***************************************************************************************/
-static std::vector<int> find_pb_routes_by_atom_net_among_top_pb_pins(
-  const t_pb* pb, const AtomNetId& atom_net_id) {
-  std::vector<int> pb_route_indices;
-
-  std::vector<int> candidate_pool;
-  for (int pin = 0; pin < pb->pb_graph_node->total_pb_pins; ++pin) {
-    /* Bypass unused pins */
-    if ((0 == pb->pb_route.count(pin)) ||
-        (AtomNetId::INVALID() == pb->pb_route.at(pin).atom_net_id)) {
-      continue;
-    }
-    /* Get the driver pb pin id, it must be valid */
-    if (atom_net_id != pb->pb_route.at(pin).atom_net_id) {
-      continue;
-    }
-    if (pb->pb_route.at(pin).pb_graph_pin->parent_node->is_root()) {
-      candidate_pool.push_back(pin);
-    }
-  }
-  return candidate_pool;
-}
-
-/***************************************************************************************
- * This function will find the actual routing traces of the demanded net
- * There is a specific search space applied when searching the routing traces:
- * - ONLY applicable to the pb_pin of top-level pb_graph_node
  * - First-tier candidates are in the same port of the source pin
  * - If nothing is found in first-tier, we find expand the range by considering
  *all the pins in the same type that are available at the top-level
@@ -611,6 +586,7 @@ static void add_lb_router_nets(
           std::string(lb_type->pb_type->name), curr_pin))) {
       /* Find the net mapped to this pin in clustering results*/
       AtomNetId atom_net_id = pb_pin_mapped_nets[source_pb_pin];
+
       std::vector<int> pb_route_indices =
         find_pb_route_by_atom_net(pb, source_pb_pin, atom_net_id);
       VTR_ASSERT(1 == pb_route_indices.size());
@@ -666,15 +642,9 @@ static void add_lb_router_nets(
 
     BasicPort curr_pin(std::string(source_pb_pin->port->name),
                        source_pb_pin->pin_number, source_pb_pin->pin_number);
-    /* Be very careful! There is only one routing trace for the net, it should
-     * never be ignored! */
     if ((ignored_atom_nets[atom_net_id]) &&
-        (find_pb_routes_by_atom_net_among_top_pb_pins(pb, atom_net_id).size() >
-         1) &&
         (options.is_pin_ignore_global_nets(std::string(lb_type->pb_type->name),
                                            curr_pin))) {
-      VTR_LOGV(verbose, "Skip net '%s' as it is global and set to be ignored\n",
-               atom_ctx.nlist.net_name(atom_net_id).c_str());
       continue;
     }
 
@@ -858,6 +828,9 @@ static void add_lb_router_nets(
     net_counter++;
   }
 
+  std::unordered_set<AtomNetId> net_ids_to_route;
+  std::unordered_set<t_pb_graph_pin*> net_source_pins;
+
   /* Find the source nodes for the nets mapped to outputs of primitive
    * pb_graph_node */
   for (int pin = 0; pin < pb->pb_graph_node->total_pb_pins; ++pin) {
@@ -901,6 +874,11 @@ static void add_lb_router_nets(
     AtomNetId atom_net_id = pb->pb_route[pin].atom_net_id;
     VTR_ASSERT(AtomNetId::INVALID() != atom_net_id);
 
+    if ((net_ids_to_route.find(atom_net_id) != net_ids_to_route.end()) && (net_source_pins.find(source_pb_pin) != net_source_pins.end())) {
+      VTR_LOGV(verbose, "Net ID %s was skipped, since its already added to be routed", atom_ctx.nlist.net_name(atom_net_id).c_str());
+      continue;
+    }
+
     /* Find all the sink pins in the pb_route */
     std::vector<t_pb_graph_pin*> sink_pb_graph_pins =
       find_routed_pb_graph_pins_atom_net(
@@ -928,6 +906,9 @@ static void add_lb_router_nets(
     add_lb_router_net_to_route(lb_router, lb_rr_graph,
                                std::vector<LbRRNodeId>(1, source_lb_rr_node),
                                sink_lb_rr_nodes, atom_ctx, atom_net_id);
+
+    net_ids_to_route.insert(atom_net_id);
+    net_source_pins.insert(source_pb_pin);
     net_counter++;
   }
 

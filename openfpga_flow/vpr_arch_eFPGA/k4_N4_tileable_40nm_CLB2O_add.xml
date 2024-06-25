@@ -151,6 +151,7 @@
 	       2.5x when looking up in Jeff's tables.
 	       Finally, we choose a switch delay (58 ps) that leads to length 4 wires having a delay equal to that of SIV of 126 ps.
 	       This also leads to the switch being 46% of the total wire delay, which is reasonable. -->
+    <switch type="mux" name="L1_mux" R="1" Cin=".1e-15" Cout="1e-15" Tdel="1e-12" mux_trans_size="2.630740" buf_size="27.645901"/>
     <switch type="mux" name="L4_mux" R="1" Cin=".1e-15" Cout="1e-15" Tdel="1e-12" mux_trans_size="2.630740" buf_size="27.645901"/>
     <switch type="mux" name="L2_mux" R="1" Cin=".1e-15" Cout="1e-15" Tdel="1e-12" mux_trans_size="2.630740" buf_size="27.645901"/>
     <!--switch ipin_cblock resistance set to yeild for 4x minimum drive strength buffer-->
@@ -160,6 +161,11 @@
     <!--- VB & JL: using ITRS metal stack data, 96 nm half pitch wires, which are intermediate metal width/space.  
 			     With the 96 nm half pitch, such wires would take 60 um of height, vs. a 90 nm high (approximated as square) Stratix IV tile so this seems
 			     reasonable. Using a tile length of 90 nm, corresponding to the length of a Stratix IV tile if it were square. -->
+    <segment name="L1" freq="0.10" length="1" type="unidir" Rmetal="101" Cmetal="22.5e-15">
+      <mux name="L1_mux"/>
+      <sb type="pattern">1 1</sb>
+      <cb type="pattern">1</cb>
+    </segment>
     <segment name="L2" freq="0.10" length="2" type="unidir" Rmetal="101" Cmetal="22.5e-15">
       <mux name="L2_mux"/>
       <sb type="pattern">1 1 1</sb>

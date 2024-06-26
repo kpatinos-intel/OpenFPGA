@@ -5,15 +5,8 @@ pcf2place --pcf ${OPENFPGA_PCF} --blif ${VPR_TESTBENCH_BLIF} --pin_table ${OPENF
 vpr ${VPR_ARCH_FILE} ${VPR_TESTBENCH_BLIF} --clock_modeling route \
                                            --device ${OPENFPGA_VPR_DEVICE_LAYOUT} \
                                            --sdc_file ${OPENFPGA_DESIGN_SDC_FILE} \
-<<<<<<< HEAD
                                            --fix_clusters ${OPENFPGA_VPR_FIX_PINS_FILE} \
                                            --timing_report_detail detailed
-=======
-                                           --gen_post_synthesis_netlist on \
-                                           --timing_report_detail detailed \
-                                           --route_chan_width ${OPENFPGA_VPR_ROUTE_CHAN_WIDTH} 
-                                          # --fix_clusters ${TOP_MODULE}_fixed.place \
->>>>>>> 48d0d239cc5a41585a4509fd50885e3ed0f65bdc
 
 # Read OpenFPGA architecture definition
 read_openfpga_arch -f ${OPENFPGA_ARCH_FILE}

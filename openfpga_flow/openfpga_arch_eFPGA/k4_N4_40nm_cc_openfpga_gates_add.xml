@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 <?xml version="1.0"?>
 <!-- Architecture annotation for OpenFPGA framework
      This annotation supports the k6_N10_40nm.xml 
@@ -206,4 +204,3 @@
     <pb_type name="clb.fle[n1_lut4].ble4.ff" circuit_model_name="DFFRQ"/>
   </pb_type_annotations>
 </openfpga_architecture>
->>>>>>> 48d0d239cc5a41585a4509fd50885e3ed0f65bdc
